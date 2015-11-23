@@ -5,7 +5,7 @@
 	angular
 		.module('app.dataAnalytics')
 		.controller('DataEntryStatisticsCtrl', DataEntryStatisticsCtrl);
-	DataEntryStatisticsCtrl.$nject = ['$rootScope', '$scope', '$stateParams', 
+	DataEntryStatisticsCtrl.$nject = ['$rootScope', '$scope', '$stateParams',
 	'OpenmrsRestService', 'LocationModel'];
 
 	function DataEntryStatisticsCtrl($rootScope, $scope, $stateParams,
@@ -27,17 +27,17 @@
 		function activate() {
 			fetchLocations();
 		}
-		
+
 		function locationSelected() {
 			$scope.selectingLocation = false;
-			
+
 			//broadcast here
 			$rootScope.$broadcast('dataEntryStatsLocationSelected', true);
 		}
-		
+
 		function fetchLocations() {
 			$scope.isBusy = true;
-			locationService.getLocations(onGetLocationsSuccess, 
+			locationService.getLocations(onGetLocationsSuccess,
 			onGetLocationsError, false);
 		}
 

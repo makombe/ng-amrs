@@ -22,6 +22,7 @@ jshint -W003, -W026
 				selectedCreator: "=",
 				selectedEncounterTypes: "=",
 				enabledControls: "="
+
 			},
 			controller: dataEntryFilterController,
 			link: dataEntryFilterLink,
@@ -29,12 +30,24 @@ jshint -W003, -W026
 		};
 	}
 
-	dataEntryFilterController.$inject = ['$scope', '$rootScope', 
-	'SearchDataService', 'moment', '$state', '$filter', 'CachedDataService', 
-	'UserResService'];
+	dataEntryFilterController.$inject = ['$scope', '$rootScope',
+	'SearchDataService', 'moment', '$state', '$filter', 'CachedDataService',
+	'UserResService','OpenmrsRestService','LocationModel' ];
 
-    function dataEntryFilterController($scope, $rootScope, SearchDataService, 
-	moment, $state, $filter, CachedDataService, UserResService) {
+    function dataEntryFilterController($scope, $rootScope, SearchDataService,
+	moment, $state, $filter, CachedDataService, UserResService,OpenmrsRestService, LocationModel) {
+
+    var locationService = OpenmrsRestService.getLocationResService();
+    $scope.selectedLocations = {};
+    $scope.selectedLocations.selectedAll = false;
+    $scope.selectedLocations.locations = [];
+    $scope.locations = [];
+    $scope.selectingLocation = true;
+    $scope.selectedView = '';
+    $scope.isBusy = false;
+    $scope.locationSelected = locationSelected;
+   // $scope.fetchLocations = fetchLocations;
+
 		$scope.forms = [];
 		$scope.selectedForms = {};
 		$scope.selectedForms.selected = [];
@@ -56,11 +69,56 @@ jshint -W003, -W026
 		$scope.canView = canView;
 
 
+
+
+
+      fetchLocations();
+
+    function locationSelected() {
+      $scope.selectingLocation = false;
+      $scope.$parent.selectedLocations=$scope.selectedLocations;
+      $scope.$parent.selectedLocations.locations=$scope.selectedLocations.locations;
+
+      //broadcast here
+      $rootScope.$broadcast('dataEntryStatsLocationSelected', true);
+    }
+
+    function fetchLocations() {
+      $scope.isBusy = true;
+      locationService.getLocations(onGetLocationsSuccess,
+        onGetLocationsError, false);
+    }
+
+    function onGetLocationsSuccess(locations) {
+      $scope.isBusy = false;
+      $scope.locations = wrapLocations(locations);
+      //$scope.selectedLocations.locations = $scope.locations;
+    }
+
+    function onGetLocationsError(error) {
+      $scope.isBusy = false;
+    }
+
+    function wrapLocations(locations) {
+      var wrappedLocations = [];
+      for (var i = 0; i < locations.length; i++) {
+        var wrapped = wrapLocation(locations[i]);
+        wrapped.index = i;
+        wrappedLocations.push(wrapped);
+      }
+
+      return wrappedLocations;
+    }
+
+    function wrapLocation(location) {
+      return LocationModel.toWrapper(location);
+    }
+
 		loadForms();
 		function loadForms() {
 			$scope.forms = CachedDataService.getCachedPocForms();
 		}
-		
+
 		function canView(param){
 			return $scope.enabledControls.indexOf(param) > -1;
 		}
@@ -80,7 +138,7 @@ jshint -W003, -W026
 			$scope.creators = [];
 			if (searchText && searchText !== ' ') {
 				$scope.findingCreator = true;
-				UserResService.findUser(searchText, 
+				UserResService.findUser(searchText,
 				onCreatorSearchSuccess, onCreatorSearchError);
 			}
 		}
@@ -93,13 +151,13 @@ jshint -W003, -W026
 		function onCreatorSearchError(error) {
 			$scope.findingCreator = false;
 		}
-		
+
 		function findProviders(searchText) {
 
 			$scope.providers = [];
 			if (searchText && searchText !== ' ') {
 				$scope.findingProvider = true;
-				SearchDataService.findProvider(searchText, 
+				SearchDataService.findProvider(searchText,
 				onProviderSearchSuccess, onProviderSearchError);
 			}
 		}
@@ -115,6 +173,6 @@ jshint -W003, -W026
 	}
 
 	function dataEntryFilterLink(scope, element, attrs, vm) {
-        
+
     }
-})();	
+})();
