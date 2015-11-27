@@ -13,6 +13,9 @@
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/angular-ui-select/dist/select.css" />
     <link rel="stylesheet" href="bower_components/angular-dialog-service/dist/dialogs.css" />
+    <link rel="stylesheet" href="bower_components/pivottable/dist/pivot.css" />
+    <link rel="stylesheet" href="bower_components/c3/c3.css" />
+    <link rel="stylesheet" href="bower_components/bootstrap-table/dist/bootstrap-table.min.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
@@ -40,10 +43,14 @@
     <div class="footer container-fluid">
         <span class="pull-right"><version/> </span>
     </div>
+
+
+    <div class="navbar navbar-default navbar-fixed-bottom">
+        <div class="footer container-fluid">
+            <span class="pull-right"><version/> </span>
+        </div>
+    </div>
 </div>
-
-
-
 <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
 <script>
  !function(A,n,g,u,l,a,r){A.GoogleAnalyticsObject=l,A[l]=A[l]||function(){
@@ -90,6 +97,24 @@
 <script src="bower_components/angular-loading/angular-loading.js"></script>
 <script src="bower_components/ui-router-extras/release/ct-ui-router-extras.js"></script>
 <script src="bower_components/karma-read-json/karma-read-json.js"></script>
+<script src="bower_components/jqueryui/jquery-ui.js"></script>
+<script src="bower_components/pivottable/dist/pivot.js"></script>
+<script src="bower_components/pivottable/dist/c3_renderers.min.js"></script>
+<script src="bower_components/pivottable/dist/gchart_renderers.min.js"></script>
+<script src="bower_components/pivottable/dist/export_renderers.min.js"></script>
+<script src="bower_components/d3/d3.js"></script>
+<script src="bower_components/c3/c3.js"></script>
+<script src="bower_components/jsnlog.js/jsnlog.js"></script>
+<script src="bower_components/angular-environment/dist/angular-environment.js"></script>
+<script src="bower_components/bootstrap-table/dist/bootstrap-table.min.js"></script>
+<script src="bower_components/bootstrap-table/dist/extensions/angular/bootstrap-table-angular.min.js"></script>
+<script src="bower_components/bootstrap-table/dist/extensions/export/bootstrap-table-export.js"></script>
+<script src="bower_components/bootstrap-table/dist/extensions/multiple-sort/bootstrap-table-multiple-sort.js"></script>
+<script src="bower_components/file-saver.js/FileSaver.js"></script>
+<script src="bower_components/html2canvas/build/html2canvas.js"></script>
+<script src="bower_components/jspdf/dist/jspdf.min.js"></script>
+<script src="bower_components/jspdf-autotable/dist/jspdf.plugin.autotable.js"></script>
+<script src="bower_components/tableExport.jquery.plugin/tableExport.min.js"></script>
 <!-- endbower -->
 <!-- endbuild -->
 
@@ -106,6 +131,7 @@
 <script src="scripts/clinic-dashboard/clinic-dashboard.module.js"></script>
 <script src="scripts/utils/utils.module.js"></script>
 <script src="scripts/admin/admin.module.js"></script>
+<script src="scripts/log-to-server/log-to-server.module.js"></script>
 <script src="scripts/data-analytics/data-analytics.module.js"></script>
 
 <!-- Services -->
@@ -134,6 +160,8 @@
 <script src="scripts/patient-search/services/patient-search.service.js"></script>
 <script src="scripts/clinic-dashboard/services/clinic-dashboard.service.js"></script>
 <script src="scripts/admin/services/hiv-summary-indicator.service.js"></script>
+<script src="scripts/log-to-server/services/log-to-server.service.js"></script>
+<script src="scripts/log-to-server/services/log-to-server-settings.service.js"></script>
 <script src="scripts/data-analytics/services/data-entry-stats-helpers.service.js"></script>
 
 <!-- models -->
@@ -187,6 +215,8 @@
 <script src="scripts/data-analytics/directives/data-entry-stats-view-two.directive.js"></script>
 <script src="scripts/data-analytics/directives/data-entry-stats-view-three.directive.js"></script>
 <script src="scripts/data-analytics/directives/data-entry-stats-view-four.directive.js"></script>
+<script src="scripts/data-analytics/directives/data-entry-stats.directive.js"></script>
+<script src="scripts/admin/directives/hiv-summary-visual-filter-controls.directive.js"></script>
 
 <!-- Controllers -->
 <script src="scripts/patient-dashboard/controllers/patient-dashboard.controller.js"></script>

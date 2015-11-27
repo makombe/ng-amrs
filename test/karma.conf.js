@@ -54,6 +54,24 @@ module.exports = function (config) {
     'bower_components/angular-loading/angular-loading.js',
     'bower_components/ui-router-extras/release/ct-ui-router-extras.js',
     'bower_components/karma-read-json/karma-read-json.js',
+    'bower_components/jqueryui/jquery-ui.js',
+    'bower_components/pivottable/dist/pivot.js',
+    'bower_components/pivottable/dist/c3_renderers.min.js',
+    'bower_components/pivottable/dist/gchart_renderers.min.js',
+    'bower_components/pivottable/dist/export_renderers.min.js',
+    'bower_components/d3/d3.js',
+    'bower_components/c3/c3.js',
+    'bower_components/jsnlog.js/jsnlog.js',
+    'bower_components/angular-environment/dist/angular-environment.js',
+    'bower_components/bootstrap-table/dist/bootstrap-table.min.js',
+    'bower_components/bootstrap-table/dist/extensions/angular/bootstrap-table-angular.min.js',
+    'bower_components/bootstrap-table/dist/extensions/export/bootstrap-table-export.js',
+    'bower_components/bootstrap-table/dist/extensions/multiple-sort/bootstrap-table-multiple-sort.js',
+    'bower_components/file-saver.js/FileSaver.js',
+    'bower_components/html2canvas/build/html2canvas.js',
+    'bower_components/jspdf/dist/jspdf.min.js',
+    'bower_components/jspdf-autotable/dist/jspdf.plugin.autotable.js',
+    'bower_components/tableExport.jquery.plugin/tableExport.min.js',
     'bower_components/angular-mocks/angular-mocks.js',
     // endbower
       'app/scripts/**/*.module.js',
@@ -62,7 +80,7 @@ module.exports = function (config) {
       'test/mock/**/*.js',
       'test/spec/**/*.js',
       '**/*.html',
-      
+
       // fixtures
       {pattern: 'test/mock/*.json', watched: true, served: true, included: false}
     ],

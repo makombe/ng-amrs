@@ -1,6 +1,6 @@
 /*jshint -W098, -W030 */
 /*jscs:disable disallowMixedSpacesAndTabs, requireDotNotation, requirePaddingNewLinesBeforeLineComments, requireTrailingComma*/
-(function () {
+(function() {
   'use strict';
 
   /**
@@ -27,9 +27,10 @@
       'app.admin',
       'app.formentry',
       'app.utils',
+      'app.logToServer',
       'ct.ui.router.extras'
     ])
-    .config(function ($stateProvider, $stickyStateProvider, $urlRouterProvider) {
+    .config(function($stateProvider, $stickyStateProvider, $urlRouterProvider) {
       $urlRouterProvider.otherwise('/');
       $stateProvider
         .state('home', {
@@ -120,6 +121,13 @@
           controller: 'HivSummaryIndicatorsCtrl',
           data: { requireLogin: true},
         })
+        .state('admin.hiv-summary-indicators.visual', {
+                  url: '/indicator_visual',
+                  templateUrl: 'views/admin/visual-indicators-container.html',
+                  controller: 'HivSummaryIndicatorsCtrl',
+                  data: { requireLogin: true},
+                })
+
         .state('admin.hiv-summary-indicators.patients', {
           url: '/location/:locationuuid/indicator/:indicator',
           templateUrl: 'views/admin/patient-list-container.html',
@@ -139,9 +147,13 @@
           data: { requireLogin: false },
         });
 
-    }).run(function ($rootScope, $state, $location, OpenmrsRestService, OpenmrsSettings, EtlRestServicesSettings, UtilService) {
+    }) .config(['$httpProvider', function($httpProvider) {
+        //$httpProvider.interceptors.push('LogToServerInterceptor');
+    }])
+    .run(function($rootScope, $state, $location, OpenmrsRestService, OpenmrsSettings,
+       EtlRestServicesSettings, UtilService) {
 
-      $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
+      $rootScope.$on('$stateChangeStart',function(event, toState, toParams) {
 
         //check whether selection of url base is required first
         var hasPersistedCurrentUrl = OpenmrsSettings.hasCoockiePersistedCurrentUrlBase() && EtlRestServicesSettings.hasCoockiePersistedCurrentUrlBase();
@@ -177,7 +189,7 @@
       $rootScope.activeEncounter;
       $rootScope.cachedLocations = [];
 
-      $rootScope.$on('$stateChangeSuccess', function (ev, to, toParams, from, fromParams) {
+      $rootScope.$on('$stateChangeSuccess', function(ev, to, toParams, from, fromParams) {
         $rootScope.previousState = from.name;
         $rootScope.currentState = to.name;
         $rootScope.previousStateParams = fromParams;
