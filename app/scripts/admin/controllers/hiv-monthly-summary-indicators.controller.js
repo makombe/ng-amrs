@@ -100,7 +100,7 @@
     function onFetchIndicatorsSchemaSuccess(result) {
       $scope.isBusy = false;
       $scope.indicatorTags =result.result;
-      $scope.indicatorTags.unshift({name:'state'},{name:'enconter_date_time'},{name:'location_uuid'} )
+      $scope.indicatorTags.unshift({name:'state'},{name:'encounter_datetime'},{name:'location_uuid'} )
 
     }
 
@@ -261,7 +261,7 @@
      * Function to add button on each cell
      */
     function cellFormatter(value, row, index, header) {
-      if(header.name==='encounter_date_time') return '<span class="text-info text-capitalize">'+value+'</span>';
+      if(header.name==='encounter_datetime') return '<span class="text-info text-capitalize">'+value+'</span>';
       if(header.name==='state') return ;
       return ['<a class="btn btn-large btn-default" style="padding: inherit; width:100%; max-width: 300px"',
         'title="'+getIndicatorLabelByName(header.name)+' (in '+row.location+')" data-toggle="tooltip"' ,

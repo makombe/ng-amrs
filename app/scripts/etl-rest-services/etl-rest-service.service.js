@@ -29,7 +29,8 @@
       getDetailsOfPatientsCreatedInLocation:getDetailsOfPatientsCreatedInLocation,
       getIndicatorsSchema:getIndicatorsSchema,
       getDailyNotReturnedVisits:getDailyNotReturnedVisits,
-      getHivSummaryFlatTable:getHivSummaryFlatTable
+      getHivSummaryFlatTable:getHivSummaryFlatTable,
+      getPatientByIndicatorAndLocation:getPatientByIndicatorAndLocation
 
     };
     return serviceDefinition;
@@ -290,6 +291,29 @@
         });
 
     }
+    function getPatientByIndicatorAndLocation(locationIds, startDate, endDate, indicator, successCallback, failedCallback, startIndex, limit) {
+      var resource = getResource('location/:uuid/patient-by-indicator');
+
+      var params = { endDate: endDate, indicator: indicator, startDate: startDate, locations: locationIds };
+
+      if (startIndex !== undefined) {
+        params.startIndex = startIndex;
+      }
+
+      if (limit !== undefined) {
+        params.limit = limit;
+      }
+
+      return resource.get(params).$promise
+        .then(function (response) {
+          successCallback(response);
+        })
+        .catch(function (error) {
+          failedCallback('Error processing request', error);
+          console.error(error);
+        });
+
+    }
 
      function getHivSummaryFlatTable(startDate, endDate,locations, successCallback, failedCallback) {
           var resource = getResource('hiv-summary-data');
@@ -306,8 +330,8 @@
         }
 
 
-    function getHivSummaryIndicators(startDate, endDate, report, countBy, successCallback, failedCallback,
-                                     startIndex, limit, groupBy) {
+    function getHivSummaryIndicators(startDate, endDate, report, countBy, successCallback, failedCallback, groupBy,
+                                     startIndex, limit) {
       var resource = getResource('hiv-summary-indicators');
 
       var params = { endDate: endDate, report: report, countBy: countBy, startDate: startDate,groupBy:groupBy };
