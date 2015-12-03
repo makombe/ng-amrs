@@ -20,7 +20,7 @@
         //Hiv Summary Indicators Service Properties & Methods
         $scope.reportName='hiv-summary-report';
         $scope.countBy='num_persons';
-     
+
         $scope.getIndicatorLabelByName=getIndicatorLabelByName;
 
 
@@ -36,7 +36,7 @@
         $scope.currentPage=1;
         $scope.defaultIndicators=[]; //initialize unfiltered indicators to []
         $scope.counter=0;
-       
+
 
         ///Multi-Select Properties/ Params
         $scope.selectedIndicatorTags={};
@@ -121,8 +121,8 @@
             if(found)
                 return found;
         }
-       
-       
+
+
         //get  Hiv  summary  flat table  error
         function onFetchHivSummaryFlatTableError(error){
             $scope.isBusy=false;
@@ -134,14 +134,14 @@
 
 
 
-      
-       
 
-      
 
-       
 
-       
+
+
+
+
+
         /**
          * Filters indicator by $scope.selectedIndicatorTags using key value pairs.
          * @property $scope.defaultIndicators, $scope.indicators $scope.selectedIndicatorTags.
@@ -180,7 +180,7 @@
 
         }
 
-        
+
 
     }
 })();

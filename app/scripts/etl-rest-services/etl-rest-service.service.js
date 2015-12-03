@@ -306,10 +306,11 @@
         }
 
 
-    function getHivSummaryIndicators(startDate, endDate, report, countBy, successCallback, failedCallback, startIndex, limit) {
+    function getHivSummaryIndicators(startDate, endDate, report, countBy, successCallback, failedCallback,
+                                     startIndex, limit, groupBy) {
       var resource = getResource('hiv-summary-indicators');
 
-      var params = { endDate: endDate, report: report, countBy: countBy, startDate: startDate };
+      var params = { endDate: endDate, report: report, countBy: countBy, startDate: startDate,groupBy:groupBy };
 
       if (startIndex !== undefined) {
         params.startIndex = startIndex;
