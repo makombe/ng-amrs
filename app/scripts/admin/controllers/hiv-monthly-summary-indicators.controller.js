@@ -16,13 +16,13 @@
     $scope.selectedLocation=$stateParams.locationuuid||'';
     $scope.selectedIndicatorBox=$stateParams.indicator||'';
     $scope.loadPatientList=loadPatientList;
-    $scope.ChangeView =ChangeView;
+    $scope.viewTypeItemSelected= viewTypeItemSelected;
 
 
     //Hiv Summary Indicators Service Properties & Methods
     $scope.reportName='hiv-summary-report';
     $scope.countBy='num_persons';
-    $scope.groupBy='groupByYear,groupByMonth';
+    //$scope.groupBy='groupByYear,groupByMonth';
     $scope.loadHivSummaryIndicators=loadHivSummaryIndicators;
     $scope.getIndicatorLabelByName =getIndicatorLabelByName;
 
@@ -30,6 +30,9 @@
     $scope.isBusy = false;
     $scope.experiencedLoadingError = false;
     $scope.resultIsEmpty= false;
+    $scope.viewType =['Location','Month'];
+    $scope.selectedItem = $scope.viewType[0];
+    //$scope.selectedItem ;
 
     //Dynamic DataTable Params
     $scope.indicators = [];  //set filtered indicators to []
@@ -65,19 +68,41 @@
     }
 
     function loadHivSummaryIndicators() {
-      $scope.experiencedLoadingErrors = false;
-      $scope.resultIsEmpty= false;
-      if($scope.isBusy === true) return;
-      $scope.indicators =[];
-      $scope.isBusy = true;
-      if ($scope.countBy && $scope.countBy !== '' && $scope.reportName && $scope.reportName!=='' && $scope.startDate
-        && $scope.startDate!=='' )
-        var locations =getSelectedLocations($scope.selectedLocations);
+     // if($scope.selectedItem ==='Month') {
+        $scope.experiencedLoadingErrors = false;
+        $scope.resultIsEmpty = false;
+        if ($scope.isBusy === true) return;
+        $scope.indicators = [];
+        $scope.isBusy = true;
+        if ($scope.countBy && $scope.countBy !== '' && $scope.reportName && $scope.reportName !== '' && $scope.startDate
+          && $scope.startDate !== '')
+          var locations = getSelectedLocations($scope.selectedLocations);
         EtlRestService.getHivSummaryIndicators(
           moment(new Date($scope.startDate)).startOf('day').format('YYYY-MM-DDTHH:mm:ss.SSSZZ'),
           moment(new Date($scope.endDate)).startOf('day').format('YYYY-MM-DDTHH:mm:ss.SSSZZ'),
           $scope.reportName, $scope.countBy, onFetchHivSummaryIndicatorsSuccess, onFetchHivSummaryIndicatorsError,
-          $scope.groupBy,locations,'encounter_datetime|asc');
+          $scope.groupBy, locations, 'encounter_datetime|asc');
+
+    }
+
+    function viewTypeItemSelected(item)  {
+      $scope.selectedItem = item;
+
+      if($scope.selectedItem ==='Month'){
+        $scope.groupBy='groupByYear,groupByMonth';
+        $scope.indicatorTags.shift();
+        $scope.indicatorTags.unshift({name:'month'});
+        loadHivSummaryIndicators();
+
+      }else if ($scope.selectedItem ==='Location'){
+        $scope.groupBy = 'groupByLocation';
+        $scope.indicatorTags.shift();
+        $scope.indicatorTags.unshift({name:'location'} );
+        loadHivSummaryIndicators();
+
+      }
+
+
     }
 
     function getSelectedLocations(selectedLocationObject) {
@@ -129,7 +154,8 @@
     function onFetchIndicatorsSchemaSuccess(result) {
       $scope.isBusy = false;
       $scope.indicatorTags =result.result;
-      $scope.indicatorTags.unshift({name:'month'},{name:'location_uuid'} );
+     $scope.indicatorTags.unshift( {name: 'location'}, {name: 'location_uuid'});
+
     }
 
     function onFetchIndicatorsSchemaError(error) {
@@ -163,19 +189,20 @@
       var found = $filter('filter')( $scope.indicatorTags, {name: name})[0];
       if(found)return found;
     }
+     function loadCachedData() {
+     if(HivMonthlySummaryIndicatorService.getIndicatorTags()) {
+     $scope.indicators = HivMonthlySummaryIndicatorService.getIndicators();
+     $scope.indicatorTags = HivMonthlySummaryIndicatorService.getIndicatorTags();
+     $scope.startDate=HivMonthlySummaryIndicatorService.getStartDate();
+     $scope.endDate=HivMonthlySummaryIndicatorService.getEndDate();
+     $scope.selectedItem=HivMonthlySummaryIndicatorService.getSelectedItem();
+     buildDataTable();
+     return true;
+       }
+     }
     /**
      * Method to fetch cached data to avoid round trips.
      */
-    function loadCachedData() {
-      if(HivMonthlySummaryIndicatorService.getIndicatorTags()) {
-        $scope.indicators = HivMonthlySummaryIndicatorService.getIndicators();
-        $scope.indicatorTags = HivMonthlySummaryIndicatorService.getIndicatorTags();
-        $scope.startDate=HivMonthlySummaryIndicatorService.getStartDate();
-        $scope.endDate=HivMonthlySummaryIndicatorService.getEndDate();
-        buildDataTable();
-        return true;
-      }
-    }
     /**
      * Function to cache data in order to prevent app from hitting the server when a resource is requested
      */
@@ -185,10 +212,9 @@
       HivMonthlySummaryIndicatorService.setSelectedLocation(getSelectedLocations($scope.selectedLocations));
       HivMonthlySummaryIndicatorService.setStartDate($scope.startDate);
       HivMonthlySummaryIndicatorService.setEndDate($scope.endDate);
+      HivMonthlySummaryIndicatorService.setSelectedItem($scope.selectedItem);
     }
-    function ChangeView(){
-      $state.go('admin.hiv-summary-combined');
-    }
+
 
     /**
      * Functions to populate and define bootstrap data table
@@ -206,6 +232,7 @@
           title:  $filter('titlecase')(header.name.toString().split('_').join(' ')) ,
           align: 'center',
           valign: 'center',
+          class:header.name==='location'?'bst-table-min-width':undefined,
           visible:visible,
           sortable:true,
           tooltip: true,
@@ -297,6 +324,8 @@
      * Function to add button on each cell
      */
     function cellFormatter(value, row, index, header) {
+      if($scope.selectedItem ==='Month'){
+
       if(header.name==='month') return '<div class="text-center" style="height:43px!important;" ><span ' +
         'class="text-info text-capitalize">'+ $filter('date')(value, 'MMM, y')+'</span></div>';
       if(header.name==='state') return ;
@@ -306,6 +335,21 @@
         'href="#/admin-dashboard/hiv-monthly-summary-indicators/month/'+ Date.parse(new Date(row.month))/1000+'/indicator/'+header.name
         +'">'+value+'</a>'
       ].join('');
+
+      }else if($scope.selectedItem ==='Location'){
+        console.log('location selected===================>>>>2',$scope.selectedItem);
+
+        if (header.name === 'location') return '<div class="text-center" style="height:43px!important;" >' +
+          '<span class="text-info text-capitalize">' + value + '</span></div>';
+        if (header.name === 'state') return;
+        return ['<a class="btn btn-large btn-default" style="padding: inherit; width:100%; max-width: 300px"',
+          'title="' + getIndicatorLabelByName(header.name) + ' (in ' + row.location + ')" data-toggle="tooltip"',
+          'data-placement="top"',
+          'href="#/admin-dashboard/hiv-summary-indicators/location/' + row.location_uuid + '/indicator/' + header.name
+          + '">' + value + '</a>'
+        ].join('');
+
+      }
     }
 
   }

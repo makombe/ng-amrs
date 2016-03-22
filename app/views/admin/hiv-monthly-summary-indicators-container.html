@@ -1,3 +1,15 @@
+<hr style="margin:0px;" />
+<div style="margin:2px;" class="btn-group" dropdown dropdown-append-to-body>
+  <button id="btn-append-to-body" type="button" class="btn btn-primary" dropdown-toggle>
+    View By: <span class="caret"></span>
+  </button>
+
+  <ul class="dropdown-menu" role="menu" aria-labelledby="btn-append-to-body" ng-model="selectedItem">
+    <li ng-repeat="items in viewType" role="menuitem"><a ng-click="viewTypeItemSelected(items)">{{items}} </a></li>
+  </ul>
+</div>
+<span class="text-primary" style="font-size: 20px; vertical-align: middle; "> HIV Summary Statistics by {{selectedItem}}</span>
+
 <report-filters enabled-controls="'start-date, end-date,location'"  start-date="startDate" end-date="endDate"
                                    selected-locations="selectedLocations" >
 </report-filters>

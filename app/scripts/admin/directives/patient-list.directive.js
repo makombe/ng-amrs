@@ -26,18 +26,18 @@
 
   patientListController.$inject =
     ['$scope', '$rootScope', 'EtlRestService', 'PatientEtlModel', '$state', 'OpenmrsRestService', 'moment',
-      'HivSummaryIndicatorService'];
+      'HivMonthlySummaryIndicatorService'];
 
   function patientListController($scope, $rootScope, EtlRestService, PatientEtlModel, $state, OpenmrsRestService,
-                                 moment, HivSummaryIndicatorService) {
+                                 moment, HivMonthlySummaryIndicatorService) {
 
     //non-function types scope members
     $scope.patients = [];
     $scope.isBusy = false;
     $scope.experiencedLoadingErrors = false;
     $scope.currentPage = 1;
-    $scope.startDate = HivSummaryIndicatorService.getStartDate();
-    $scope.endDate = HivSummaryIndicatorService.getEndDate();
+    $scope.startDate = HivMonthlySummaryIndicatorService.getStartDate();
+    $scope.endDate = HivMonthlySummaryIndicatorService.getEndDate();
 
     //function types scope members
     $scope.loadPatientList = loadPatientList;
@@ -62,7 +62,7 @@
     }
 
     function loadIndicatorView() {
-      $state.go('admin.hiv-summary-indicators.indicator');
+      $state.go('admin.hiv-monthly-summary-indicators.monthly');
     }
 
     function loadPatientList(loadNextOffset) {
@@ -110,7 +110,7 @@
     }
 
     function getIndicatorDetails() {
-      return HivSummaryIndicatorService.getIndicatorDetails();
+      return HivMonthlySummaryIndicatorService.getIndicatorDetails();
     }
     }
 

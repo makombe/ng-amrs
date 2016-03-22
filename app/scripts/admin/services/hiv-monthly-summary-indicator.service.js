@@ -16,6 +16,7 @@
     var endDate = new Date();
     var indicatorTags;
     var indicators;
+    var selectedItem;
     var defaultIndicators;
     var selectedPosition;
     var selectedMonth;
@@ -37,6 +38,8 @@
       setIndicatorTags:setIndicatorTags,
       getIndicators:getIndicators,
       setIndicators:setIndicators,
+      getSelectedItem:getSelectedItem,
+      setSelectedItem:setSelectedItem,
       getDefaultIndicators:getDefaultIndicators,
       setDefaultIndicators:setDefaultIndicators,
       getSelectedPosition:getSelectedPosition,
@@ -135,6 +138,15 @@
     function setEndDate(date) {
       endDate = date;
     }
+
+    function getSelectedItem() {
+      return selectedItem;
+    }
+
+    function setSelectedItem(value) {
+      selectedItem = value;
+    }
+
 
   }
 
